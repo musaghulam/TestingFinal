@@ -5,39 +5,61 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using EmployeeDB;
- 
+
 
 namespace Testing.Controllers
 {
     public class EmployeeController : ApiController
     {
-       
+
         // GET api/values
         public IEnumerable<Employee> Get()
         {
-            using(EmployeeDBEntities ToData = new EmployeeDBEntities())
+            using (EmployeeDBEntities ToData = new EmployeeDBEntities())
             {
                 return ToData.Employees.ToList();
-            }           
+            }
         }
 
-        
+
         // GET api/values/5
-        public Employee Get(int id)
+        public HttpResponseMessage Get(int id)
         {
-           using(EmployeeDBEntities ToData = new EmployeeDBEntities())
+            using (EmployeeDBEntities ToData = new EmployeeDBEntities())
             {
-                return ToData.Employees.FirstOrDefault(e => e.ID == id);
+                var entity = ToData.Employees.FirstOrDefault(e => e.ID == id);
+                if (entity != null)
+                {
+                    return Request.CreateResponse(HttpStatusCode.OK, entity);
+                }
+                else
+                {
+                    return Request.CreateResponse(HttpStatusCode.NotFound, "Employee No found" + id.ToString());
+                }
             };
         }
 
         // POST api/values
-        public void Post([FromBody]string value)
+        public HttpResponseMessage Post([FromBody]Employee value)
         {
-            using (EmployeeDBEntities ToData = new EmployeeDBEntities())
+            try
             {
-                 
-            };
+                using (EmployeeDBEntities entities = new EmployeeDBEntities())
+                {
+                    entities.Employees.Add(value);
+                    entities.SaveChanges();
+
+                    var message = Request.CreateResponse(HttpStatusCode.Created, value);
+                    message.Headers.Location = new Uri(Request.RequestUri + value.ID.ToString());
+                    return message;
+
+                };
+            }
+            catch (Exception exp)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, exp);
+                throw;
+            }
         }
 
         // PUT api/values/5
@@ -45,7 +67,7 @@ namespace Testing.Controllers
         {
             using (EmployeeDBEntities ToData = new EmployeeDBEntities())
             {
-                
+
             };
         }
 
@@ -54,7 +76,7 @@ namespace Testing.Controllers
         {
             using (EmployeeDBEntities ToData = new EmployeeDBEntities())
             {
-                 
+
             };
         }
     }
