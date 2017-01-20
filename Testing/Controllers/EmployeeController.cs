@@ -11,7 +11,6 @@ namespace Testing.Controllers
 {
     public class EmployeeController : ApiController
     {
-
         // GET api/values
         public IEnumerable<Employee> Get()
         {
@@ -20,8 +19,6 @@ namespace Testing.Controllers
                 return ToData.Employees.ToList();
             }
         }
-
-
         // GET api/values/5
         public HttpResponseMessage Get(int id)
         {
