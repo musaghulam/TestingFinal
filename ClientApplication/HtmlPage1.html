@@ -1,0 +1,64 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="utf-8" />
+    <script src="Scripts/jquery-1.10.2.js"></script>
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            var ulEmployees = $('#ulEmployees');
+
+            $('#btn').click(function () {
+                $.support.cors = true;
+                $.ajax({
+                    url: 'http://localhost:9621/api/employee',
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function (data) {
+                        ulEmployees.empty();
+                        $.each(data, function (index, val) {
+                            var FullName = val.FirstName + ' ' + val.LastName;
+                            ulEmployees.append('<ul>' + FullName + '</ul>');
+                        });
+                    },
+                    error: function (e) {
+                        console.log(e.message);
+                    }
+                });
+
+                //$.ajax({
+                //    type: 'Get',
+                //    url: 'http://localhost:9621/api/employee?callback=foo',
+                //    datatype: 'jsonp',
+                //    success: function (data) {
+                //        ulEmployees.empty();
+                //        $.each(data, function (index, val) {
+                //            var FullName = val.FirstName + ' ' + val.LastName;
+                //            ulEmployees.append('<ul>' + FullName + '</ul>');
+                //        });
+                //    }
+
+                //});
+
+                //function foo()
+                //{
+                //    alert('call back functionc called');
+                //}
+
+                $('#btnClear').click(function () {
+                    ulEmployees.empty();
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+
+    <div>
+        <input id="btn" type="button" value="Get All Employees" />
+        <input id="btnClear" type="button" value="Clear" />
+        <ul id="ulEmployees" />
+    </div>
+</body>
+</html>

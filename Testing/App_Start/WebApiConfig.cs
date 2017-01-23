@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Web.Http;
+﻿using System.Web.Http;
 using Microsoft.Owin.Security.OAuth;
-using Newtonsoft.Json.Serialization;
+using WebApiContrib.Formatting.Jsonp;
+using System.Web.Http.Cors;
 
 namespace Testing
 {
@@ -25,6 +22,15 @@ namespace Testing
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
+
+            //var jsonpFormatter =  new JsonpMediaTypeFormatter(config.Formatters.JsonFormatter);
+            //config.Formatters.Insert(0, jsonpFormatter);
+
+            //EnableCorsAttribute Cors = new EnableCorsAttribute("*", "*", "*");
+            config.EnableCors();
+
+          
+           
         }
     }
 }
